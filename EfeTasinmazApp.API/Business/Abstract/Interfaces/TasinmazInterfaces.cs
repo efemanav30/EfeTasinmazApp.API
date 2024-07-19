@@ -9,7 +9,7 @@ namespace EfeTasinmazApp.API.Business.Abstract
         Task<List<Tasinmaz>> GetAllAsync();
         Task<Tasinmaz> GetByIdAsync(int id);
         Task<Tasinmaz> AddAsync(Tasinmaz tasinmaz);
-        Task<Tasinmaz> UpdateAsync(Tasinmaz tasinmaz);
+        Task<Tasinmaz> UpdateAsync(int id, Tasinmaz tasinmaz);
         Task<bool> DeleteAsync(int id);
     }
 }

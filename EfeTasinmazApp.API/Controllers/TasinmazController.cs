@@ -227,19 +227,14 @@ namespace EfeTasinmazApp.API.Controllers
 
         // PUT: api/Tasinmaz/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTasinmaz(int id, Tasinmaz tasinmaz)
+        public async Task<ActionResult<Tasinmaz>> UpdateTasinmaz(int id, Tasinmaz tasinmazBilgi)
         {
-            if (id != tasinmaz.Id)
+            if (tasinmazBilgi == null)
             {
-                return BadRequest("ID mismatch");
+                return BadRequest();
             }
 
-            var updatedTasinmaz = await _tasinmazService.UpdateAsync(tasinmaz);
-            if (updatedTasinmaz == null)
-            {
-                return NotFound();
-            }
-
+            var updatedTasinmaz = await _tasinmazService.UpdateAsync(id, tasinmazBilgi);
             return Ok(updatedTasinmaz);
         }
 

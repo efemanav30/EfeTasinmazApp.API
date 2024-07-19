@@ -53,6 +53,9 @@ namespace EfeTasinmazApp.API.Entities.Concrete
         public string KoordinatBilgileri{ get; set; }
 
         [Required]
+        public string Adres { get; set; }
+
+        [Required]
         [ForeignKey("Mahalle")]
         public int MahalleId { get; set; }
 

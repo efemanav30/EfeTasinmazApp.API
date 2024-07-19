@@ -4,6 +4,7 @@ using EfeTasinmazApp.API.DataAccess;
 using EfeTasinmazApp.API.Entities.Concrete;
 using EfeTasinmazApp.API.Business.Abstract;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace EfeTasinmazApp.API.Business.Concrete
 {
@@ -23,7 +24,7 @@ namespace EfeTasinmazApp.API.Business.Concrete
 
         public async Task<Tasinmaz> GetByIdAsync(int id)
         {
-            return await _context.Tasinmazlar.FindAsync(id);
+            return await _context.Tasinmazlar.Include(x=>x.Mahalle).ThenInclude(l=>l.Ilce).ThenInclude(a=>a.Il).FirstOrDefaultAsync(x=>x.Id==id);
         }
 
         public async Task<Tasinmaz> AddAsync(Tasinmaz tasinmaz)
@@ -33,11 +34,20 @@ namespace EfeTasinmazApp.API.Business.Concrete
             return tasinmaz;
         }
 
-        public async Task<Tasinmaz> UpdateAsync(Tasinmaz tasinmaz)
+        public async Task<Tasinmaz> UpdateAsync(int id, Tasinmaz tasinmaz)
         {
-            _context.Tasinmazlar.Update(tasinmaz);
+            var yeniTasinmaz = _context.Tasinmazlar.FirstOrDefault(
+                x => x.Id == id);
+            yeniTasinmaz.MahalleId = tasinmaz.MahalleId;
+            yeniTasinmaz.Ada = tasinmaz.Ada;
+            yeniTasinmaz.Parsel = tasinmaz.Parsel;
+            yeniTasinmaz.Nitelik = tasinmaz.Nitelik;
+            yeniTasinmaz.KoordinatBilgileri = tasinmaz.KoordinatBilgileri;
+            yeniTasinmaz.Adres = tasinmaz.Adres;
+
+           
             await _context.SaveChangesAsync();
-            return tasinmaz;
+            return yeniTasinmaz;
         }
 
         public async Task<bool> DeleteAsync(int id)
