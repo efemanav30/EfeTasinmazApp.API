@@ -8,6 +8,7 @@ using EfeTasinmazApp.API.DataAccess;
 using Microsoft.OpenApi.Models;
 using EfeTasinmazApp.API.Business.Abstract;
 using EfeTasinmazApp.API.Business.Concrete;
+using Tasinmaz_Proje.Services;
 
 namespace EfeTasinmazApp.API
 {
@@ -27,6 +28,11 @@ namespace EfeTasinmazApp.API
                 {
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
+
+            services.AddScoped<IUserService, UserService>();
+
+
+            services.AddScoped<ILogService, LogService>();
 
             services.AddCors(options =>
             {

@@ -29,11 +29,13 @@ namespace TasinmazYonetimi2.Entities.Concrete
     }
 }
 */
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace EfeTasinmazApp.API.Entities.Concrete
 {
+
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using Tasinmaz_Proje.Entities;
+
     public class Tasinmaz
     {
         [Key]
@@ -50,7 +52,7 @@ namespace EfeTasinmazApp.API.Entities.Concrete
         public string Nitelik { get; set; }
 
         [Required]
-        public string KoordinatBilgileri{ get; set; }
+        public string KoordinatBilgileri { get; set; }
 
         [Required]
         public string Adres { get; set; }
@@ -60,5 +62,11 @@ namespace EfeTasinmazApp.API.Entities.Concrete
         public int MahalleId { get; set; }
 
         public Mahalle Mahalle { get; set; }
+
+       /* [ForeignKey("UserId")]
+
+        public int UserId { get; set; }
+
+        public virtual User User { get; set; }*/
     }
 }

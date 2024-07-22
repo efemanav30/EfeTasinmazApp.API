@@ -21,6 +21,7 @@ namespace EfeTasinmazApp.API.DataAccess
 */
 using Microsoft.EntityFrameworkCore;
 using EfeTasinmazApp.API.Entities.Concrete;
+using Tasinmaz_Proje.Entities;
 
 namespace EfeTasinmazApp.API.DataAccess
 {
@@ -32,5 +33,9 @@ namespace EfeTasinmazApp.API.DataAccess
         public DbSet<Mahalle> Mahalleler { get; set; }
         public DbSet<Ilce> Ilceler { get; set; }
         public DbSet<Il> Iller { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<Log> Logs { get; set; }
+
     }
 }
