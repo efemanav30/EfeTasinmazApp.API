@@ -38,7 +38,6 @@ namespace EfeTasinmazApp.API.Controllers
             return Ok(user);
         }
 
-        // POST: api/User
         [HttpPost]
         public async Task<ActionResult<User>> AddUser(User user)
         {
@@ -50,6 +49,7 @@ namespace EfeTasinmazApp.API.Controllers
             var createdUser = await _userService.AddAsync(user);
             return CreatedAtAction(nameof(GetUser), new { id = createdUser.Id }, createdUser);
         }
+
 
         // PUT: api/User/5
         [HttpPut("{id}")]

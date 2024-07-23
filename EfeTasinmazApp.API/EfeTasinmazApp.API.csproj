@@ -5,18 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="NewFolder\**" />
-    <Content Remove="NewFolder\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
-    <None Remove="NewFolder\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Folder Include="Core2\Entitites\" />
     <Folder Include="Core\DataAccess\" />
     <Folder Include="Core\Entities\" />
     <Folder Include="DataAccess\Abstract\" />
     <Folder Include="DataAccess\Concrete\" />
     <Folder Include="Entities\Abstract\" />
+    <Folder Include="Core\" />
   </ItemGroup>
 
   <ItemGroup>

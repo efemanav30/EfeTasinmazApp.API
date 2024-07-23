@@ -29,6 +29,7 @@ namespace EfeTasinmazApp.API.Business.Concrete
 
         public async Task<User> AddAsync(User user)
         {
+            user.Id = 0; // Ensure the Id is zero so it will auto-increment
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return user;

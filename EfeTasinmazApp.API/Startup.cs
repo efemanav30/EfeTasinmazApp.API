@@ -44,6 +44,7 @@ namespace EfeTasinmazApp.API
                         .AllowCredentials());
             });
 
+            services.AddAuthentication();
             services.AddDbContext<MyDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
