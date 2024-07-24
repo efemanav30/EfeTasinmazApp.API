@@ -63,10 +63,16 @@ namespace EfeTasinmazApp.API.Entities.Concrete
 
         public Mahalle Mahalle { get; set; }
 
-       /* [ForeignKey("UserId")]
-
         public int UserId { get; set; }
 
-        public virtual User User { get; set; }*/
+        [ForeignKey("UserId")]
+
+        public User User { get; set; }
+
+        /* [ForeignKey("UserId")]
+
+         public int UserId { get; set; }
+
+         public virtual User User { get; set; }*/
     }
 }

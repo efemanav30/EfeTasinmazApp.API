@@ -19,7 +19,9 @@ namespace EfeTasinmazApp.API.Business.Concrete
 
         public async Task<List<Tasinmaz>> GetAllAsync()
         {
-            return await _context.Tasinmazlar.Include(t => t.Mahalle).ThenInclude(t=>t.Ilce).ThenInclude(t=>t.Il).ToListAsync();
+            return await _context.Tasinmazlar.Include(t => t.Mahalle).ThenInclude(t=>t.Ilce).ThenInclude(t=>t.Il).
+                Include(t=>t.User).
+                ToListAsync();
         }
 
         public async Task<Tasinmaz> GetByIdAsync(int id)

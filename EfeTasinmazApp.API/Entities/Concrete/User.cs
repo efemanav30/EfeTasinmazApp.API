@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EfeTasinmazApp.API.Entities.Concrete;
+using System.Collections;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Tasinmaz_Proje.Entities
 {
@@ -31,5 +34,7 @@ namespace Tasinmaz_Proje.Entities
 
         [Required]
         public string Role { get; set; }
+
+       //public ICollection<Tasinmaz> Tasinmazlar { get; set; }
     }
 }
