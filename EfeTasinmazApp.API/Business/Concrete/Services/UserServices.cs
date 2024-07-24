@@ -46,7 +46,6 @@ namespace EfeTasinmazApp.API.Business.Concrete
             existingUser.Name = user.Name;
             existingUser.Surname = user.Surname;
             existingUser.Email = user.Email;
-            existingUser.Password = user.Password;
             existingUser.Phone = user.Phone;
             existingUser.Adress = user.Adress;
 

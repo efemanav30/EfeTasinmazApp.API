@@ -1,6 +1,4 @@
-﻿using EfeTasinmazApp.API.Entities.Concrete;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Tasinmaz_Proje.Entities
 {
@@ -8,6 +6,7 @@ namespace Tasinmaz_Proje.Entities
     {
         [Key]
         public int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
 
@@ -17,8 +16,12 @@ namespace Tasinmaz_Proje.Entities
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+
         [Required]
-        public string Password { get; set; }
+        public byte[] PasswordHash { get; set; }
+
+        [Required]
+        public byte[] PasswordSalt { get; set; }
 
         [Required]
         public string Phone { get; set; }
@@ -28,8 +31,5 @@ namespace Tasinmaz_Proje.Entities
 
         [Required]
         public string Role { get; set; }
-
-       // public ICollection<Tasinmaz> Tasinmazlar { get; set; } error 500
-
     }
 }

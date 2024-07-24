@@ -9,6 +9,11 @@ using Microsoft.OpenApi.Models;
 using EfeTasinmazApp.API.Business.Abstract;
 using EfeTasinmazApp.API.Business.Concrete;
 using Tasinmaz_Proje.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using EfeTasinmazApp.API.Business.Abstract.Interfaces;
+using EfeTasinmazApp.API.Business.Concrete.Services;
 
 namespace EfeTasinmazApp.API
 {
@@ -23,6 +28,8 @@ namespace EfeTasinmazApp.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("Appsettings:Token").Value);
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
@@ -43,8 +50,19 @@ namespace EfeTasinmazApp.API
                         .AllowAnyMethod()
                         .AllowCredentials());
             });
+            services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
 
-            services.AddAuthentication();
+
+            });
             services.AddDbContext<MyDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -79,7 +97,7 @@ namespace EfeTasinmazApp.API
             // CORS politikasýný burada kullanýn
             app.UseCors("AllowSpecificOrigins");
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
@@ -87,6 +105,7 @@ namespace EfeTasinmazApp.API
             });
 
             app.UseSwagger();
+            app.UseAuthentication();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "EfeTasinmazApp API");
