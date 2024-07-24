@@ -30,6 +30,8 @@ namespace EfeTasinmazApp.API
         {
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("Appsettings:Token").Value);
+
+
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
