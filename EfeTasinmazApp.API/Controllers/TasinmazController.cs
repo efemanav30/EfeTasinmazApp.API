@@ -183,6 +183,8 @@ using EfeTasinmazApp.API.Entities.Concrete;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EfeTasinmazApp.API.Business.Abstract;
+using System.Security.Claims;
+using System;
 
 namespace EfeTasinmazApp.API.Controllers
 {
@@ -201,10 +203,19 @@ namespace EfeTasinmazApp.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tasinmaz>>> GetTasinmazlar()
         {
-            var tasinmazlar = await _tasinmazService.GetAllAsync();
-            return Ok(tasinmazlar);
+            try
+            {
+                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var tasinmazlar = await _tasinmazService.GetAllByUserIdAsync(userId);
+                return Ok(tasinmazlar);
+            }
+            catch (Exception ex)
+            {
+                // Hata loglaması
+                Console.WriteLine($"Error getting Tasinmazlar: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
         }
-
         // GET: api/Tasinmaz/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Tasinmaz>> GetTasinmaz(int id)

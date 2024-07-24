@@ -19,14 +19,14 @@ namespace EfeTasinmazApp.API.Business.Concrete
 
         public async Task<List<Tasinmaz>> GetAllAsync()
         {
-            return await _context.Tasinmazlar.Include(t => t.Mahalle).ThenInclude(t=>t.Ilce).ThenInclude(t=>t.Il).
-                Include(t=>t.User).
+            return await _context.Tasinmazlar.Include(t => t.Mahalle).ThenInclude(t => t.Ilce).ThenInclude(t => t.Il).
+                Include(t => t.User).
                 ToListAsync();
         }
 
         public async Task<Tasinmaz> GetByIdAsync(int id)
         {
-            return await _context.Tasinmazlar.Include(x=>x.Mahalle).ThenInclude(l=>l.Ilce).ThenInclude(a=>a.Il).FirstOrDefaultAsync(x=>x.Id==id);
+            return await _context.Tasinmazlar.Include(x => x.Mahalle).ThenInclude(l => l.Ilce).ThenInclude(a => a.Il).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Tasinmaz> AddAsync(Tasinmaz tasinmaz)
@@ -47,7 +47,7 @@ namespace EfeTasinmazApp.API.Business.Concrete
             yeniTasinmaz.KoordinatBilgileri = tasinmaz.KoordinatBilgileri;
             yeniTasinmaz.Adres = tasinmaz.Adres;
 
-           
+
             await _context.SaveChangesAsync();
             return yeniTasinmaz;
         }
@@ -64,5 +64,17 @@ namespace EfeTasinmazApp.API.Business.Concrete
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<List<Tasinmaz>> GetAllByUserIdAsync(int userId)
+        {
+            return await _context.Tasinmazlar
+                .Include(t => t.Mahalle)
+                    .ThenInclude(m => m.Ilce)
+                        .ThenInclude(i => i.Il)
+                .Include(t => t.User)  // User bilgisini dahil ettiğinizden emin olun
+                .Where(t => t.UserId == userId)
+                .ToListAsync();
+        }
+
     }
 }

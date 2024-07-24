@@ -11,5 +11,7 @@ namespace EfeTasinmazApp.API.Business.Abstract
         Task<Tasinmaz> AddAsync(Tasinmaz tasinmaz);
         Task<Tasinmaz> UpdateAsync(int id, Tasinmaz tasinmaz);
         Task<bool> DeleteAsync(int id);
+        Task<List<Tasinmaz>> GetAllByUserIdAsync(int userId); // Bu satırı ekleyin
+
     }
 }
