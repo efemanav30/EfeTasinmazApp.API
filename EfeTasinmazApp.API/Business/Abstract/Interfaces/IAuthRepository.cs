@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿
+using System.Threading.Tasks;
 using Tasinmaz_Proje.Entities;
 
 namespace EfeTasinmazApp.API.Business.Abstract.Interfaces
@@ -8,5 +9,9 @@ namespace EfeTasinmazApp.API.Business.Abstract.Interfaces
         Task<User> Register(User user, string password);
         Task<User> Login(string eMail, string password);
         Task<bool> UserExists(string eMail);
+        Task<User> GetUserById(int id); // Yeni metod
+        Task<bool> IsAdmin(string eMail);
+
+
     }
 }

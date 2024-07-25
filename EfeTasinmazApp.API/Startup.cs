@@ -28,9 +28,7 @@ namespace EfeTasinmazApp.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("Appsettings:Token").Value);
-
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -39,8 +37,6 @@ namespace EfeTasinmazApp.API
                 });
 
             services.AddScoped<IUserService, UserService>();
-
-
             services.AddScoped<ILogService, LogService>();
 
             services.AddCors(options =>
@@ -52,6 +48,7 @@ namespace EfeTasinmazApp.API
                         .AllowAnyMethod()
                         .AllowCredentials());
             });
+
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -62,9 +59,8 @@ namespace EfeTasinmazApp.API
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
-
-
             });
+
             services.AddDbContext<MyDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -100,6 +96,7 @@ namespace EfeTasinmazApp.API
             app.UseCors("AllowSpecificOrigins");
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -107,7 +104,6 @@ namespace EfeTasinmazApp.API
             });
 
             app.UseSwagger();
-            app.UseAuthentication();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "EfeTasinmazApp API");

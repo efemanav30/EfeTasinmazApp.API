@@ -76,5 +76,7 @@ namespace EfeTasinmazApp.API.Business.Concrete
                 .ToListAsync();
         }
 
+
+
     }
 }

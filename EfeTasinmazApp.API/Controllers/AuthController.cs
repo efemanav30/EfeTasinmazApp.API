@@ -51,11 +51,11 @@ namespace EfeTasinmazApp.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult>Login([FromBody] UserForLoginDto userForLoginDto)
+        public async Task<ActionResult> Login([FromBody] UserForLoginDto userForLoginDto)
         {
             var user = await _authRepository.Login(userForLoginDto.Email, userForLoginDto.Password);
 
-            if (user==null)
+            if (user == null)
             {
                 return Unauthorized();
             }
@@ -67,13 +67,13 @@ namespace EfeTasinmazApp.API.Controllers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email)
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role) // Kullanıcı rolünü token'a ekleyin
                 }),
 
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha512Signature)
-
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
@@ -81,5 +81,15 @@ namespace EfeTasinmazApp.API.Controllers
             return Ok(new { Token = tokenString });
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByUserId(int id)
+        {
+            var user = await _authRepository.GetUserById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
     }
 }
