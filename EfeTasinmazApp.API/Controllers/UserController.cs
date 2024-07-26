@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EfeTasinmazApp.API.Business.Abstract;
 using Tasinmaz_Proje.Entities;
+using System;
+using Tasinmaz_Proje.Services;
 
 namespace EfeTasinmazApp.API.Controllers
 {
@@ -12,10 +14,12 @@ namespace EfeTasinmazApp.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly ILogService _logService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, ILogService logService)
         {
             _userService = userService;
+            _logService = logService;
         }
 
         // GET: api/User
@@ -41,15 +45,51 @@ namespace EfeTasinmazApp.API.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> AddUser(User user)
         {
-            if (!ModelState.IsValid)
+            try {
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var createdUser = await _userService.AddAsync(user);
+
+                var log = new Log
+                {
+                    KullaniciId = createdUser.Id, // createdUser.Id kullanarak doğru kullanıcı ID'sini alın
+                    Durum = "Başarılı",
+                    IslemTip = "Kullanıcı Ekleme",
+                    Aciklama = $"Kullanıcı ID: {createdUser.Id} eklendi",
+                    TarihveSaat = DateTime.Now,
+                    KullaniciTip = "Admin"
+                };
+                await _logService.AddLog(log);
+
+                
+
+
+
+            }
+            catch (Exception e)
             {
-                return BadRequest(ModelState);
+
+                var log = new Log
+                {
+                    KullaniciId = 44, // createdUser.Id kullanarak doğru kullanıcı ID'sini alın
+                    Durum = "Başarılı",
+                    IslemTip = "Kullanıcı Ekleme",
+                    Aciklama = e.Message,
+                    TarihveSaat = DateTime.Now,
+                    KullaniciTip = "Admin"
+                };
+                await _logService.AddLog(log);
             }
 
-            var createdUser = await _userService.AddAsync(user);
-            return CreatedAtAction(nameof(GetUser), new { id = createdUser.Id }, createdUser);
-        }
+            return CreatedAtAction(nameof(GetUser), new { id = 55 },  "fırat");
 
+
+
+        }
 
         // PUT: api/User/5
         [HttpPut("{id}")]
@@ -61,6 +101,18 @@ namespace EfeTasinmazApp.API.Controllers
             }
 
             var updatedUser = await _userService.UpdateAsync(id, userInfo);
+
+            var log = new Log
+            {
+                KullaniciId = updatedUser.Id, // updatedUser.Id kullanarak doğru kullanıcı ID'sini alın
+                Durum = "Başarılı",
+                IslemTip = "Kullanıcı Güncelleme",
+                Aciklama = $"Kullanıcı ID: {updatedUser.Id} güncellendi",
+                TarihveSaat = DateTime.Now,
+                KullaniciTip = "Admin"
+            };
+            await _logService.AddLog(log);
+
             return Ok(updatedUser);
         }
 
@@ -73,6 +125,18 @@ namespace EfeTasinmazApp.API.Controllers
             {
                 return NotFound();
             }
+
+            var log = new Log
+            {
+                KullaniciId = id,
+                Durum = "Başarılı",
+                IslemTip = "Kullanıcı Silme",
+                Aciklama = $"Kullanıcı ID: {id} silindi",
+                TarihveSaat = DateTime.Now,
+                KullaniciTip = "Admin"
+            };
+            await _logService.AddLog(log);
+
             return NoContent();
         }
     }

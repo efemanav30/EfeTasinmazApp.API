@@ -73,7 +73,7 @@ namespace EfeTasinmazApp.API.Business.Concrete.Services
         {
             return await _dbContext.Users.AnyAsync(x => x.Email == eMail);
         }
-
+       
         public async Task<bool> IsAdmin(string eMail)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == eMail);

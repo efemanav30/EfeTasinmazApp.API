@@ -6,10 +6,13 @@ namespace Tasinmaz_Proje.Services
 {
     public interface ILogService
     {
-        Task<List<Log>> GetAllAsync();
-        Task<Log> GetByIdAsync(int id);
-        Task<Log> AddAsync(Log log);
-        Task<Log> UpdateAsync(int id, Log log);
-        Task<bool> DeleteAsync(int id);
+        Task<List<Log>> ListLog();
+        Task<Log> GetLogById(int id);
+        Task AddLog(Log log);
+        Task UpdateLog(Log log);
+        Task DeleteLog(int id);
+
+        Task<IEnumerable<Log>> GetAllLogsAsync();
+        Task<IEnumerable<Log>> SearchLogsAsync(string term);
     }
 }

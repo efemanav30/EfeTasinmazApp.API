@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="LoggingMiddleware.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Core2\Entitites\" />
     <Folder Include="Core\DataAccess\" />
     <Folder Include="Core\Entities\" />

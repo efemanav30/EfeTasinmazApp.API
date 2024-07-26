@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Security.AccessControl;
+using System.Threading.Tasks;
 using Tasinmaz_Proje.Entities;
 using Tasinmaz_Proje.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Tasinmaz_Proje.Controllers
 {
@@ -10,68 +11,64 @@ namespace Tasinmaz_Proje.Controllers
     [ApiController]
     public class LogController : ControllerBase
     {
-        private readonly ILogService _logService;
+        private readonly ILogService _service;
 
-        public LogController(ILogService logService)
+        public LogController(ILogService service)
         {
-            _logService = logService;
+            _service = service;
         }
 
-        // GET: api/Log
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Log>>> GetLogs()
+        public async Task<ActionResult<IEnumerable<Log>>> GetAllLog()
         {
-            var logs = await _logService.GetAllAsync();
+            var logs = await _service.ListLog();
             return Ok(logs);
         }
 
-        // GET: api/Log/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Log>> GetLog(int id)
+        public async Task<ActionResult<Log>> GetLogById(int id)
         {
-            var log = await _logService.GetByIdAsync(id);
+            var log = await _service.GetLogById(id);
             if (log == null)
             {
                 return NotFound();
             }
-            return Ok(log);
+            return log;
         }
 
-        // POST: api/Log
         [HttpPost]
         public async Task<ActionResult<Log>> AddLog(Log log)
         {
-            var createdLog = await _logService.AddAsync(log);
-            return CreatedAtAction(nameof(GetLog), new { id = createdLog.Id }, createdLog);
+            await _service.AddLog(log);
+            return CreatedAtAction(nameof(GetLogById), new { id = log.Id }, log);
         }
 
-        // PUT: api/Log/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Log>> UpdateLog(int id, Log log)
+        public async Task<IActionResult> UpdateLog(int id, Log log)
         {
-            if (log == null)
+            if (id != log.Id)
             {
                 return BadRequest();
             }
 
-            var updatedLog = await _logService.UpdateAsync(id, log);
-            if (updatedLog == null)
-            {
-                return NotFound();
-            }
-            return Ok(updatedLog);
+            await _service.UpdateLog(log);
+            return NoContent();
         }
 
-        // DELETE: api/Log/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLog(int id)
         {
-            var result = await _logService.DeleteAsync(id);
-            if (!result)
-            {
-                return NotFound();
-            }
+            await _service.DeleteLog(id);
             return NoContent();
+        }
+
+
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchLogs(string term)
+        {
+            var logs = await _service.SearchLogsAsync(term);
+            return Ok(logs);
         }
     }
 }

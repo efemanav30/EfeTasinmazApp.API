@@ -28,6 +28,8 @@ namespace EfeTasinmazApp.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ILogService, LogService>(); // ILogService ve LogService burada eklenmeli
+
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("Appsettings:Token").Value);
 
             services.AddControllers()
@@ -72,8 +74,33 @@ namespace EfeTasinmazApp.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EfeTasinmazApp.API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                new string[] {}
+            }
+                });
             });
         }
+
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -92,11 +119,11 @@ namespace EfeTasinmazApp.API
 
             app.UseRouting();
 
-            // CORS politikasýný burada kullanýn
             app.UseCors("AllowSpecificOrigins");
 
             app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
@@ -109,5 +136,6 @@ namespace EfeTasinmazApp.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "EfeTasinmazApp API");
             });
         }
+
     }
 }

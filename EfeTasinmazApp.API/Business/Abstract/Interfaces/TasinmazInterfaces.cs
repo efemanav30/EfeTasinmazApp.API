@@ -10,8 +10,10 @@ namespace EfeTasinmazApp.API.Business.Abstract
         Task<Tasinmaz> GetByIdAsync(int id);
         Task<Tasinmaz> AddAsync(Tasinmaz tasinmaz);
         Task<Tasinmaz> UpdateAsync(int id, Tasinmaz tasinmaz);
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id, int userId);
         Task<List<Tasinmaz>> GetAllByUserIdAsync(int userId); // Bu satırı ekleyin
+        Task<IEnumerable<Tasinmaz>> SearchAllAsync(string keyword);  // Yeni metod
+        Task<IEnumerable<Tasinmaz>> SearchByUserIdAsync(int userId, string keyword);
 
     }
 }

@@ -52,7 +52,7 @@ namespace EfeTasinmazApp.API.Business.Concrete
             return yeniTasinmaz;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id, int userId)
         {
             var tasinmaz = await _context.Tasinmazlar.FindAsync(id);
             if (tasinmaz == null)
@@ -62,8 +62,11 @@ namespace EfeTasinmazApp.API.Business.Concrete
 
             _context.Tasinmazlar.Remove(tasinmaz);
             await _context.SaveChangesAsync();
+
             return true;
         }
+
+
 
         public async Task<List<Tasinmaz>> GetAllByUserIdAsync(int userId)
         {
@@ -73,6 +76,31 @@ namespace EfeTasinmazApp.API.Business.Concrete
                         .ThenInclude(i => i.Il)
                 .Include(t => t.User)  // User bilgisini dahil ettiğinizden emin olun
                 .Where(t => t.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Tasinmaz>> SearchAllAsync(string keyword)
+        {
+            return await _context.Tasinmazlar
+                .Include(t => t.Mahalle)
+                .ThenInclude(m => m.Ilce)
+                .ThenInclude(i => i.Il)
+                .Where(t => t.Ada.Contains(keyword) || t.Parsel.Contains(keyword) || t.Nitelik.Contains(keyword) ||
+                            t.Mahalle.Name.Contains(keyword) || t.Mahalle.Ilce.Name.Contains(keyword) ||
+                            t.Mahalle.Ilce.Il.Name.Contains(keyword) || t.Adres.Contains(keyword))
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Tasinmaz>> SearchByUserIdAsync(int userId, string keyword)
+        {
+            return await _context.Tasinmazlar
+                .Include(t => t.Mahalle)
+                .ThenInclude(m => m.Ilce)
+                .ThenInclude(i => i.Il)
+                .Where(t => t.UserId == userId &&
+                            (t.Ada.Contains(keyword) || t.Parsel.Contains(keyword) || t.Nitelik.Contains(keyword) ||
+                             t.Mahalle.Name.Contains(keyword) || t.Mahalle.Ilce.Name.Contains(keyword) ||
+                             t.Mahalle.Ilce.Il.Name.Contains(keyword) || t.Adres.Contains(keyword)))
                 .ToListAsync();
         }
 
