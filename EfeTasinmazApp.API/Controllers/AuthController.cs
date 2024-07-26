@@ -28,12 +28,18 @@ namespace EfeTasinmazApp.API.Controllers
             _configuration = configuration;
             _logService = logService;
         }
-        [HttpPost]
+
+        [HttpPost("register")]
         public async Task<ActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
             var userToCreate = new User
             {
-                Email = userForRegisterDto.Email
+                Name = userForRegisterDto.Name,
+                Surname = userForRegisterDto.Surname,
+                Email = userForRegisterDto.Email,
+                Phone = userForRegisterDto.Phone,
+                Adress = userForRegisterDto.Adress,
+                Role = userForRegisterDto.Role
             };
 
             try
@@ -70,7 +76,6 @@ namespace EfeTasinmazApp.API.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
 
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] UserForLoginDto userForLoginDto)
