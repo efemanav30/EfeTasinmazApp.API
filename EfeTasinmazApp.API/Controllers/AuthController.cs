@@ -131,6 +131,7 @@ namespace EfeTasinmazApp.API.Controllers
 
             return Ok(new { Token = tokenString });
         }
+
         [Authorize]
         [HttpPost("logout")]
         public async Task<ActionResult> LogOut()
@@ -182,9 +183,6 @@ namespace EfeTasinmazApp.API.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
-
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByUserId(int id)
